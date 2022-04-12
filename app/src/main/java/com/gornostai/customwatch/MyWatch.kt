@@ -19,6 +19,11 @@ class MyWatch @JvmOverloads constructor(
     defStyle
 ) {
 
+    init {
+        init()
+        initializeAttributes(attrs, defStyle)
+    }
+
     private val clockFacePaint = Paint().apply {
         color = Color.BLACK
         isAntiAlias = true
@@ -26,20 +31,13 @@ class MyWatch @JvmOverloads constructor(
         style = Paint.Style.STROKE
     }
 
-    private val secondHandPaint = Paint().apply {
-        color = Color.RED
-        strokeWidth = context.resources.getDimension(R.dimen.watch_strokeWidth)
-    }
+    private lateinit var secondHandPaint: Paint
+    private lateinit var minuteHandPaint: Paint
+    private lateinit var hourHandPaint: Paint
 
-    private val minuteHandPaint = Paint().apply {
-        color = Color.BLUE
-        strokeWidth = context.resources.getDimension(R.dimen.watch_strokeWidth)
-    }
-
-    private val hourHandPaint = Paint().apply {
-        color = Color.BLACK
-        strokeWidth = context.resources.getDimension(R.dimen.watch_strokeWidth)
-    }
+    private var secondHandSize = 0f
+    private var minuteHandSize = 0f
+    private var hourHandSize = 0f
 
     private var widthCenter = 0f
     private var heightCenter = 0f
@@ -92,7 +90,7 @@ class MyWatch @JvmOverloads constructor(
             widthCenter,
             heightCenter + 80,
             widthCenter,
-            heightCenter - 300,
+            heightCenter - secondHandSize,
             secondHandPaint
         )
         canvas.restore()
@@ -108,7 +106,7 @@ class MyWatch @JvmOverloads constructor(
             widthCenter,
             heightCenter + 50,
             widthCenter,
-            heightCenter - 250,
+            heightCenter - minuteHandSize,
             minuteHandPaint
         )
         canvas.restore()
@@ -124,13 +122,46 @@ class MyWatch @JvmOverloads constructor(
             widthCenter,
             heightCenter + 30,
             widthCenter,
-            heightCenter - 200,
+            heightCenter - hourHandSize,
             hourHandPaint
         )
         canvas.restore()
 
         invalidate()
     }
+
+    private fun initializeAttributes(attrs: AttributeSet?, defStyle: Int){
+        if (attrs == null) return
+        val typedArray = context.obtainStyledAttributes(attrs, R.styleable.MyWatch, defStyle,0)
+
+        val colorSecondHand = typedArray.getColor(R.styleable.MyWatch_colorSecondHand, Color.RED)
+        secondHandPaint.color = colorSecondHand
+        val colorMinuteHand = typedArray.getColor(R.styleable.MyWatch_colorMinuteHand, Color.BLUE)
+        minuteHandPaint.color = colorMinuteHand
+        val colorHourHand = typedArray.getColor(R.styleable.MyWatch_colorHourHand, Color.BLACK)
+        hourHandPaint.color = colorHourHand
+        val sizeSecondHand = typedArray.getDimension(R.styleable.MyWatch_sizeSecondHand,300f)
+        secondHandSize = sizeSecondHand
+        val sizeMinuteHand = typedArray.getDimension(R.styleable.MyWatch_sizeMinuteHand,250f)
+        minuteHandSize = sizeMinuteHand
+        val sizeHourHand = typedArray.getDimension(R.styleable.MyWatch_sizeHourHand,200f)
+        hourHandSize = sizeHourHand
+
+        typedArray.recycle()
+    }
+
+    private fun init(){
+        secondHandPaint = Paint().apply {
+            strokeWidth = context.resources.getDimension(R.dimen.watch_strokeWidth)
+        }
+        minuteHandPaint= Paint().apply {
+            strokeWidth = context.resources.getDimension(R.dimen.watch_strokeWidth)
+        }
+        hourHandPaint = Paint().apply {
+            strokeWidth = context.resources.getDimension(R.dimen.watch_strokeWidth)
+        }
+    }
+
 }
 
 

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="MyWatch">
+        
+        <attr name="colorSecondHand" format="color" />
+        <attr name="colorMinuteHand" format="color" />
+        <attr name="colorHourHand" format="color" />
+
+        <attr name="sizeSecondHand" format="dimension" />
+        <attr name="sizeMinuteHand" format="dimension" />
+        <attr name="sizeHourHand" format="dimension" />
+
+
+    </declare-styleable>
+
+</resources>
